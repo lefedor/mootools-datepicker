@@ -19,6 +19,8 @@
  * 
  */
 
+/* Mootools-more/Date.locales support by FedorFL, changes marked as '//FedorFL: localization' */
+
 var DatePicker = new Class({
 	
 	Implements: Options,
@@ -79,12 +81,31 @@ var DatePicker = new Class({
 	initialize: function(attachTo, options) {
 		this.attachTo = attachTo;
 		this.setOptions(options).attach();
+		
+		//FedorFL: localization
+		if(this.getMsg() && this.getMsg('days') && this.getMsg('months')){
+			this.options.days=this.getMsg('days');
+			this.options.months=this.getMsg('months');
+			this.getOrdinal=function(dayOfMonth){return this.getMsg('ordinal', dayOfMonth);};
+			if(!options || !options.format){
+				var date_fmt=this.getMsg('shortDate');
+				if(date_fmt){
+					this.options.format=date_fmt.replace(/\%/g, '');
+				}
+			}
+		}
+		
 		if (this.options.timePickerOnly) {
 			this.options.timePicker = true;
 			this.options.startView = 'time';
 		}
 		this.formatMinMaxDates();
 		document.addEvent('mousedown', this.close.bind(this));
+	},
+	
+	//FedorFL: localization
+	getMsg: function(key, args) {
+			return false; //Default mode - no localization, chk @ 'DatePicker.implement({' && later on line ~749
 	},
 	
 	formatMinMaxDates: function() {
@@ -717,3 +738,111 @@ var DatePicker = new Class({
 		return d;
 	}
 });
+
+/*
+ *  UNCOMMENT THIS FOR MULTILANG
+ *
+
+//FedorFL: localization
+DatePicker.implement({
+	getMsg: function(key, args) {
+		if(!key){return true};
+		return MooTools.lang.get('Date', key, args);
+	}
+});
+
+MooTools.lang.set('en-US', 'Date', {
+
+	months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+	days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+	//culture's date order: MM/DD/YYYY
+	dateOrder: ['month', 'date', 'year'],
+	shortDate: '%m/%d/%Y',
+	shortTime: '%I:%M%p',
+	AM: 'AM',
+	PM: 'PM',
+
+	ordinal: function(dayOfMonth){
+		//1st, 2nd, 3rd, etc.
+		return (dayOfMonth > 3 && dayOfMonth < 21) ? 'th' : ['th', 'st', 'nd', 'rd', 'th'][Math.min(dayOfMonth % 10, 4)];
+	},
+
+	lessThanMinuteAgo: 'less than a minute ago',
+	minuteAgo: 'about a minute ago',
+	minutesAgo: '{delta} minutes ago',
+	hourAgo: 'about an hour ago',
+	hoursAgo: 'about {delta} hours ago',
+	dayAgo: '1 day ago',
+	daysAgo: '{delta} days ago',
+	weekAgo: '1 week ago',
+	weeksAgo: '{delta} weeks ago',
+	monthAgo: '1 month ago',
+	monthsAgo: '{delta} months ago',
+	yearAgo: '1 year ago',
+	yearsAgo: '{delta} years ago',
+	lessThanMinuteUntil: 'less than a minute from now',
+	minuteUntil: 'about a minute from now',
+	minutesUntil: '{delta} minutes from now',
+	hourUntil: 'about an hour from now',
+	hoursUntil: 'about {delta} hours from now',
+	dayUntil: '1 day from now',
+	daysUntil: '{delta} days from now',
+	weekUntil: '1 week from now',
+	weeksUntil: '{delta} weeks from now',
+	monthUntil: '1 month from now',
+	monthsUntil: '{delta} months from now',
+	yearUntil: '1 year from now',
+	yearsUntil: '{delta} years from now'
+
+});
+
+MooTools.lang.set('ru-RU-unicode', 'Date', {
+
+	months: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+	days: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'],
+	//culture's date order: MM/DD/YYYY
+	dateOrder: ['date', 'month', 'year'],
+	AM: 'AM',
+	PM: 'PM',
+
+	shortDate: '%d.%m.%Y',
+	shortTime: '%H:%M',
+
+
+  pluralize: function (n, one, few, many, other) {
+    var modulo10 = n % 10
+    var modulo100 = n % 100
+
+    if (modulo10 == 1 && modulo100 != 11) {
+      return one;
+    } else if ((modulo10 == 2 || modulo10 == 3 || modulo10 == 4) && !(modulo100 == 12 || modulo100 == 13 || modulo100 == 14)) {
+      return few;
+    } else if (modulo10 == 0 || (modulo10 == 5 || modulo10 == 6 || modulo10 == 7 || modulo10 == 8 || modulo10 == 9) || (modulo100 == 11 || modulo100 == 12 || modulo100 == 13 || modulo100 == 14)) {
+      return many;
+    } else {
+      return other;
+    }
+  },
+
+	ordinal: '',
+	lessThanMinuteAgo: 'меньше минуты назад',
+	minuteAgo: 'минута назад',
+	minutesAgo: function (delta) { return  '{delta} ' + this.pluralize(delta, 'минута', 'минуты', 'минут') + ' назад'},
+	hourAgo: 'час назад',
+	hoursAgo: function (delta) { return  '{delta} ' + this.pluralize(delta, 'час', 'часа', 'часов') + ' назад'},
+	dayAgo: 'вчера',
+	daysAgo: function (delta) { return '{delta} ' + this.pluralize(delta, 'день', 'дня', 'дней') + ' назад' },
+	lessThanMinuteUntil: 'меньше минуты назад',
+	minuteUntil: 'через минуту',
+	minutesUntil: function (delta) { return  'через {delta} ' + this.pluralize(delta, 'час', 'часа', 'часов') + ''},
+	hourUntil: 'через час',
+	hoursUntil: function (delta) { return  'через {delta} ' + this.pluralize(delta, 'час', 'часа', 'часов') + ''},
+	dayUntil: 'завтра',
+	daysUntil: function (delta) { return 'через {delta} ' + this.pluralize(delta, 'день', 'дня', 'дней') + '' }
+
+});
+
+//FedorFL: localization
+MooTools.lang.setLanguage('ru-RU-unicode');
+MooTools.lang.set('ru-RU-unicode', 'cascade', ['ru-RU-unicode', 'en-US']);
+*/
