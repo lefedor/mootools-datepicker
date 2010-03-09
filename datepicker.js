@@ -109,14 +109,16 @@ var DatePicker = new Class({
 	},
 	
 	formatMinMaxDates: function() {
-		if (this.options.minDate && this.options.minDate.format) {
-			this.options.minDate = this.unformat(this.options.minDate.date, this.options.minDate.format);
+		//formatMinMaxDates() - the date extentions has added a Date.format() function to native date objects
+		//http://github.com/monkeyphysics/mootools-datepicker/issues#issue/3
+		if (this.options.minDate && this.options.minDate.inputFormat) { 
+			 this.options.minDate = this.unformat(this.options.minDate.date, this.options.minDate.inputFormat);
 		}
-		if (this.options.maxDate && this.options.maxDate.format) {
-			this.options.maxDate = this.unformat(this.options.maxDate.date, this.options.maxDate.format);
-			this.options.maxDate.setHours(23);
-			this.options.maxDate.setMinutes(59);
-			this.options.maxDate.setSeconds(59);
+		if (this.options.maxDate && this.options.maxDate.inputFormat) {
+			 this.options.maxDate = this.unformat(this.options.maxDate.date, this.options.maxDate.inputFormat);
+			 this.options.maxDate.setHours(23);
+			 this.options.maxDate.setMinutes(59);
+			 this.options.maxDate.setSeconds(59);
 		}
 	},
 	
