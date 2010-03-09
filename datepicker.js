@@ -88,9 +88,24 @@ var DatePicker = new Class({
 			this.options.months=this.getMsg('months');
 			this.getOrdinal=function(dayOfMonth){return this.getMsg('ordinal', dayOfMonth);};
 			if(!options || !options.format){
-				var date_fmt=this.getMsg('shortDate');
-				if(date_fmt){
-					this.options.format=date_fmt.replace(/\%/g, '');
+				if(!this.options.timePickerOnly){
+					var date_fmt=this.getMsg('shortDate');
+					if(date_fmt){
+						this.options.format=date_fmt.replace(/\%/g, '');
+					}
+				}
+				if(this.options.timePicker){
+					var tme_fmt=this.getMsg('shortTime');
+					if(tme_fmt){
+						tme_fmt=tme_fmt.replace(/M/g, 'i');
+						tme_fmt=tme_fmt.replace(/S/g, 's');
+						if(!this.options.timePickerOnly){
+							this.options.format+=' '+tme_fmt.replace(/\%/g, '');
+						}
+						else{
+							this.options.format=tme_fmt.replace(/\%/g, '');
+						}
+					}
 				}
 			}
 		}
@@ -847,4 +862,5 @@ MooTools.lang.set('ru-RU-unicode', 'Date', {
 //FedorFL: localization
 MooTools.lang.setLanguage('ru-RU-unicode');
 MooTools.lang.set('ru-RU-unicode', 'cascade', ['ru-RU-unicode', 'en-US']);
+
 */
