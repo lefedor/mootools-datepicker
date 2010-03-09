@@ -99,6 +99,8 @@ var DatePicker = new Class({
 					if(tme_fmt){
 						tme_fmt=tme_fmt.replace(/M/g, 'i');
 						tme_fmt=tme_fmt.replace(/S/g, 's');
+						tme_fmt=tme_fmt.replace(/I/g, 'h');
+						tme_fmt=tme_fmt.replace(/p/g, 'A');
 						if(!this.options.timePickerOnly){
 							this.options.format+=' '+tme_fmt.replace(/\%/g, '');
 						}
@@ -862,5 +864,4 @@ MooTools.lang.set('ru-RU-unicode', 'Date', {
 //FedorFL: localization
 MooTools.lang.setLanguage('ru-RU-unicode');
 MooTools.lang.set('ru-RU-unicode', 'cascade', ['ru-RU-unicode', 'en-US']);
-
 */
