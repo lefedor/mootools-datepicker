@@ -80,7 +80,7 @@ var DatePicker = new Class({
 	
 	initialize: function(attachTo, options) {
 		this.attachTo = attachTo;
-		this.setOptions(options).attach();
+		this.setOptions(options);
 		
 		//FedorFL: localization
 		if(this.getMsg() && this.getMsg('days') && this.getMsg('months')){
@@ -111,7 +111,9 @@ var DatePicker = new Class({
 				}
 			}
 		}
-		
+
+		this.attach();
+
 		if (this.options.timePickerOnly) {
 			this.options.timePicker = true;
 			this.options.startView = 'time';
